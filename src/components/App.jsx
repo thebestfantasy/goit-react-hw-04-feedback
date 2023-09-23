@@ -5,25 +5,27 @@ import Section from './Section/Section';
 import Notification from './Notifications/Notification';
 
 const App = () => {
-  const [goodValue, setGoodValue] = uGeState(0);
-  const [neutralValue, setNeutral] = uGeState(0);
-  const [badValue, setBadValue] = uGeState(0);
-  usesta
+  const [good, setGood] = useState(0);
+  const [neutral, setNeutral] = useState(0);
+  const [bad, setBad] = useState(0);
 
-  const countTotalFeedback = () => {
-    return this.state.good + this.state.neutral + this.state.bad;
-  };
+  const total = good + neutral + bad;
 
-  const countPositiveFeedbackPercentage = () => {
-    const total = this.countTotalFeedback();
-    const { good } = this.state;
-    return total > 0 ? ((good / total) * 100).toFixed(2) : 0;
-  };
+  const totalPositivePercentage =
+    total > 0 ? ((good / total) * 100).toFixed(2) : 0;
 
   const handleFeedback = feedbackType => {
-    this.setState(prevState => ({
-      [feedbackType]: prevState[feedbackType] + 1,
-    }));
+    switch (feedbackType) {
+      case 'good':
+        setGood(prevGood => prevGood + 1);
+        break;
+      case 'neutral':
+        setNeutral(prevNeutral => prevNeutral + 1);
+        break;
+      case 'bad':
+        setBad(prevBad => prevBad + 1);
+        break;
+    }
   };
 
   return (
@@ -31,17 +33,17 @@ const App = () => {
       <Section title="Please leave feedback">
         <FeedbackOptions
           onLeaveFeedback={handleFeedback}
-          options={feedbackOptions}
+          options={['good', 'neutral', 'bad']}
         ></FeedbackOptions>
       </Section>
       <Section title="Statistics">
-        {countTotalFeedback() ? (
+        {total ? (
           <Statistics
-            good={goodValue}
-            neutral={neutralValue}
-            bad={badValue}
-            total={countTotalFeedback()}
-            positivePercentage={countPositiveFeedbackPercentage()}
+            good={good}
+            neutral={neutral}
+            bad={bad}
+            total={total}
+            positivePercentage={totalPositivePercentage}
           />
         ) : (
           <Notification message="No feedback given"></Notification>
@@ -68,11 +70,11 @@ const App = () => {
 //     return total > 0 ? ((good / total) * 100).toFixed(2) : 0;
 //   };
 
-//   handleFeedback = feedbackType => {
-//     this.setState(prevState => ({
-//       [feedbackType]: prevState[feedbackType] + 1,
-//     }));
-//   };
+// handleFeedback = feedbackType => {
+//   this.setState(prevState => ({
+//     [feedbackType]: prevState[feedbackType] + 1,
+//   }));
+// };
 
 //   render() {
 //     const { good, neutral, bad } = this.state;
